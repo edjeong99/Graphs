@@ -80,6 +80,35 @@ class Graph:
                 for neighbor in self.vertices[v]:
                     q.enqueue(neighbor)
 
+    def bfs(self, starting_vertex_id, query):
+        # Create an empty queue
+        q = Queue()
+        # Create an empty set of visited vertices
+        visited = set()
+
+        # Put the starting vertex in our Queue
+        q.enqueue(starting_vertex_id)
+        # While the queue is not empty....
+
+        def bfs_helper(self, starting_id):
+
+            # base case - if q size is 0
+            if q.size() <= 0:
+                return None
+
+            # recursive part
+            v = q.dequeue()
+
+            if v == query:
+                return visited
+
+            for neighbor in self.vertices[v]:
+                result = bfs_helper(neighbor)
+                if result is not None:
+                    return result
+
+        bfs.helper(starting_vertex_id)
+
     def dft(self, starting_vertex_id):
         # Create an empty stack
         s = Stack()
@@ -99,3 +128,28 @@ class Graph:
                 # Then, put all of it's children into the stack
                 for neighbor in self.vertices[v]:
                     s.push(neighbor)
+
+    def dft_recursive(self, starting_vertex_id, visited=None):
+        if visited is None:
+            visited = set()
+
+        print(starting_vertex_id)
+        visited.add(starting_vertex_id)
+
+        # Then, put all of it's children into the stack
+        for neighbor in self.vertices[starting_vertex_id]:
+            if neighbor not in visited:
+                self.dft_recursive(neighbor, visited)
+
+
+graph = Graph()  # Instantiate your graph
+graph.add_vertex('0')
+graph.add_vertex('1')
+graph.add_vertex('2')
+graph.add_vertex('3')
+graph.add_edge('0', '1')
+graph.add_edge('0', '3')
+print(graph.vertices)
+print("end of vertices")
+
+graph.dft_recursive('0')
