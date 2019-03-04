@@ -85,32 +85,33 @@ class Graph:
         q = Queue()
         # Create an empty set of visited vertices
         visited = set()
-
+        path = set()
         # Put the starting vertex in our Queue
         q.enqueue(starting_vertex_id)
-        # While the queue is not empty....
+        path.add(starting_vertex_id)
+        q.enqueue(path)  # path for this vortex
 
-        def bfs_helper():
+        while q.size() > 0:
+
             # get next item in queue
             v = q.dequeue()
+            visited.add(v)
+            print(v)
 
-            # base case - if q size is 0 or already visited vortex
-            if q.size() <= 0:
-                return None
+            path = q.dequeue()
+            print(path)
 
-            # recursive part
-
+            # check all neighbor of current vortex
             for neighbor in self.vertices[v]:
-                if neighbor in visited:
-                    return None
-                if neighbor == query:
-                    return visited
-                q.enqueue(neighbor)
-                visited.add(v)
+                temp = path.copy()
+                if neighbor not in visited:
+                    if neighbor == query:
+                        print(path)
+                        return path
 
-            bfs_helper()
-
-        return bfs_helper()
+                    q.enqueue(neighbor)
+                    temp.add(neighbor)
+                    q.enqueue(temp)
 
     def dft(self, starting_vertex_id):
         # Create an empty stack
@@ -165,7 +166,7 @@ graph.add_edge('5', '3')
 graph.add_edge('5', '6')
 
 
-# print(graph.vertices)
+print(graph.vertices)
 #print("end of vertices")
 
-print(graph.bfs('0', '5'))
+graph.bfs('0', '6')
