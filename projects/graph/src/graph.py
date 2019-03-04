@@ -85,32 +85,32 @@ class Graph:
         q = Queue()
         # Create an empty set of visited vertices
         visited = set()
-        path = set()
+
+        # create a list for path for each vertex
+        path = []
+
         # Put the starting vertex in our Queue
         q.enqueue(starting_vertex_id)
-        path.add(starting_vertex_id)
-        q.enqueue(path)  # path for this vortex
+        # assign path for this vertex
+        path.append(starting_vertex_id)
+        q.enqueue(path)
 
         while q.size() > 0:
 
-            # get next item in queue
+            # get next item and path for that item in queue
             v = q.dequeue()
-            visited.add(v)
-            print(v)
-
             path = q.dequeue()
-            print(path)
 
+            if v not in visited:
+                if v == query:
+                    return path  # if match, return path
+
+                visited.add(v)  # add vertex to visited
             # check all neighbor of current vortex
-            for neighbor in self.vertices[v]:
-                temp = path.copy()
-                if neighbor not in visited:
-                    if neighbor == query:
-                        print(path)
-                        return path
-
+                for neighbor in self.vertices[v]:
+                    temp = path[:]
                     q.enqueue(neighbor)
-                    temp.add(neighbor)
+                    temp.append(neighbor)
                     q.enqueue(temp)
 
     def dft(self, starting_vertex_id):
@@ -167,6 +167,6 @@ graph.add_edge('5', '6')
 
 
 print(graph.vertices)
-#print("end of vertices")
+print("end of vertices")
 
-graph.bfs('0', '6')
+graph.bfs('0', '7')
