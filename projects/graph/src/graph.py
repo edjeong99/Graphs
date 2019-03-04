@@ -90,24 +90,27 @@ class Graph:
         q.enqueue(starting_vertex_id)
         # While the queue is not empty....
 
-        def bfs_helper(self, starting_id):
+        def bfs_helper():
+            # get next item in queue
+            v = q.dequeue()
 
-            # base case - if q size is 0
+            # base case - if q size is 0 or already visited vortex
             if q.size() <= 0:
                 return None
 
             # recursive part
-            v = q.dequeue()
-
-            if v == query:
-                return visited
 
             for neighbor in self.vertices[v]:
-                result = bfs_helper(neighbor)
-                if result is not None:
-                    return result
+                if neighbor in visited:
+                    return None
+                if neighbor == query:
+                    return visited
+                q.enqueue(neighbor)
+                visited.add(v)
 
-        bfs.helper(starting_vertex_id)
+            bfs_helper()
+
+        return bfs_helper()
 
     def dft(self, starting_vertex_id):
         # Create an empty stack
@@ -130,11 +133,12 @@ class Graph:
                     s.push(neighbor)
 
     def dft_recursive(self, starting_vertex_id, visited=None):
+        # initialize visited set
         if visited is None:
             visited = set()
 
-        print(starting_vertex_id)
-        visited.add(starting_vertex_id)
+        print(starting_vertex_id)  # print current vertex
+        visited.add(starting_vertex_id)  # add current veretext to visited
 
         # Then, put all of it's children into the stack
         for neighbor in self.vertices[starting_vertex_id]:
@@ -147,9 +151,21 @@ graph.add_vertex('0')
 graph.add_vertex('1')
 graph.add_vertex('2')
 graph.add_vertex('3')
+graph.add_vertex('4')
+graph.add_vertex('5')
+graph.add_vertex('6')
+graph.add_vertex('7')
+
 graph.add_edge('0', '1')
 graph.add_edge('0', '3')
-print(graph.vertices)
-print("end of vertices")
+graph.add_edge('0', '4')
+graph.add_edge('1', '7')
+graph.add_edge('1', '4')
+graph.add_edge('5', '3')
+graph.add_edge('5', '6')
 
-graph.dft_recursive('0')
+
+# print(graph.vertices)
+#print("end of vertices")
+
+print(graph.bfs('0', '5'))
