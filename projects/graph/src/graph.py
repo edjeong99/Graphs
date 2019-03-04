@@ -146,6 +146,39 @@ class Graph:
             if neighbor not in visited:
                 self.dft_recursive(neighbor, visited)
 
+    def dfs(self, starting_vertex_id, query):
+        # Create an empty queue
+        s = Stack()
+        # Create an empty set of visited vertices
+        visited = set()
+
+        # create a list for path for each vertex
+        path = []
+
+        # Put the starting vertex in our Queue
+        s.push(starting_vertex_id)
+        # assign path for this vertex
+        path.append(starting_vertex_id)
+        s.push(path)
+
+        while s.size() > 0:
+
+            # get next item and path for that item in queue
+            path = s.pop()
+            v = s.pop()
+
+            if v not in visited:
+                if v == query:
+                    return path  # if match, return path
+
+                visited.add(v)  # add vertex to visited
+            # check all neighbor of current vortex
+                for neighbor in self.vertices[v]:
+                    temp = path[:]
+                    s.push(neighbor)
+                    temp.append(neighbor)
+                    s.push(temp)
+
 
 graph = Graph()  # Instantiate your graph
 graph.add_vertex('0')
@@ -169,4 +202,5 @@ graph.add_edge('5', '6')
 print(graph.vertices)
 print("end of vertices")
 
-graph.bfs('0', '7')
+#print(graph.bfs('0', '7'))
+print(graph.dfs('3', '1'))
