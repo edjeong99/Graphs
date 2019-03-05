@@ -82,19 +82,20 @@ class SocialGraph:
         # initialize queue and visited
         q = Queue()
         for friend in self.friendships[userID]:
-            q.enqueue(userID)
+            q.enqueue(userID)  #for each userID, I enqueue friend
             q.enqueue(friend)
 
         visited[userID] = [userID]
 
-        while q:
+        while q.size() > 0:
             # dequeue a userID and one of its friend
             current_userID = q.dequeue()
             current_user_friend = q.dequeue()
-
+            
             # if current userID is not in visited, do stuff.
             if current_user_friend not in visited:
-                # add current userID to visited
+                
+                # add current userID to and the path
                 visited[current_user_friend] = visited[current_userID] +[current_user_friend]
                 # enqueue friends of current userID
                 for friend in self.friendships[current_user_friend]:
