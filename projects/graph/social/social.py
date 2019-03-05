@@ -1,5 +1,5 @@
-
 import random
+from queue import Queue
 
 
 class User:
@@ -78,12 +78,35 @@ class SocialGraph:
         """
         visited = {}  # Note that this is a dictionary, not a set
         # !!!! IMPLEMENT ME
+
+        # initialize queue and visited
+        q = Queue()
+        for friend in self.friendships[userID]:
+            q.enqueue(userID)
+            q.enqueue(friend)
+
+        visited[userID] = [userID]
+
+        while q:
+            # dequeue a userID and one of its friend
+            current_userID = q.dequeue()
+            current_user_friend = q.dequeue()
+
+            # if current userID is not in visited, do stuff.
+            if current_user_friend not in visited:
+                # add current userID to visited
+                visited[current_user_friend] = visited[current_userID] +[current_user_friend]
+                # enqueue friends of current userID
+                for friend in self.friendships[current_user_friend]:
+                    q.enqueue(current_user_friend)
+                    q.enqueue(friend)
+
         return visited
 
 
 if __name__ == '__main__':
     sg = SocialGraph()
-    sg.populateGraph(4, 2)
+    sg.populateGraph(6, 2)
     print(sg.friendships)
     connections = sg.getAllSocialPaths(1)
     print(connections)
