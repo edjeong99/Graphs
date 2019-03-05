@@ -19,11 +19,14 @@ class SocialGraph:
         """
         if userID == friendID:
             print("WARNING: You cannot be friends with yourself")
+            return False
         elif friendID in self.friendships[userID] or userID in self.friendships[friendID]:
             print("WARNING: Friendship already exists")
+            return False
         else:
             self.friendships[userID].add(friendID)
             self.friendships[friendID].add(userID)
+            return True
 
     def addUser(self, name):
         """
@@ -54,18 +57,33 @@ class SocialGraph:
             self.addUser(f"User {i+1}")
 
         # Create friendships
-        possibleFriendships = []
-        for userID in self.users:
-            for friendID in range(userID + 1, self.lastID + 1):
-                possibleFriendships.append((userID, friendID))
-        random.shuffle(possibleFriendships)
-        print(possibleFriendships[:numUsers])
+
+        # below codes make O(N^2)
+        # possibleFriendships = []
+        # for userID in self.users:
+        #     for friendID in range(userID + 1, self.lastID + 1):
+        #         possibleFriendships.append((userID, friendID))
+        # random.shuffle(possibleFriendships)
+        #print(possibleFriendships[:numUsers])
         # print(len(possibleFriendships))
 
-        # assign friendship based on possibleFriendships
-        for i in range(numUsers * avgFriendships // 2):
-            self.addFriendship(
-                possibleFriendships[i][0], possibleFriendships[i][1])
+        ## assign friendship based on possibleFriendships
+        # for i in range(numUsers * avgFriendships // 2):
+        #     self.addFriendship(
+        #         possibleFriendships[i][0], possibleFriendships[i][1])
+ 
+        # populate with time complexity O(n)
+        count = 0
+
+        while count < numUsers * avgFriendships // 2:
+            num1 = random.randint(1,numUsers)
+            num2 = num1
+            while num1 == num2:
+                num2 = random.randint(1,numUsers)
+            if self.addFriendship(num1, num2):
+                count += 1
+
+       
 
     def getAllSocialPaths(self, userID):
         """
@@ -109,5 +127,6 @@ if __name__ == '__main__':
     sg = SocialGraph()
     sg.populateGraph(6, 2)
     print(sg.friendships)
-    connections = sg.getAllSocialPaths(1)
-    print(connections)
+    # connections = sg.getAllSocialPaths(1)
+    # print(connections)
+    # print(len(connections))
