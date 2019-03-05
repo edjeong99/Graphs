@@ -86,32 +86,26 @@ class Graph:
         # Create an empty set of visited vertices
         visited = set()
 
-        # create a list for path for each vertex
-        path = []
+        # Put the starting vertex in our Queue as list
 
-        # Put the starting vertex in our Queue
-        q.enqueue(starting_vertex_id)
-        # assign path for this vertex
-        path.append(starting_vertex_id)
-        q.enqueue(path)
+        q.enqueue([starting_vertex_id])
 
         while q.size() > 0:
 
             # get next item and path for that item in queue
-            v = q.dequeue()
             path = q.dequeue()
-
+            v = path[-1]
             if v not in visited:
+                visited.add(v)  # add vertex to visited
+
                 if v == query:
                     return path  # if match, return path
 
-                visited.add(v)  # add vertex to visited
-            # check all neighbor of current vortex
+            # check all neighbor of current vortex and add them in Queue
                 for neighbor in self.vertices[v]:
-                    temp = path[:]
-                    q.enqueue(neighbor)
-                    temp.append(neighbor)
-                    q.enqueue(temp)
+                    new_path = list(path)
+                    new_path.append(neighbor)
+                    q.enqueue(new_path)
 
     def dft(self, starting_vertex_id):
         # Create an empty stack
@@ -180,27 +174,56 @@ class Graph:
                     s.push(temp)
 
 
-graph = Graph()  # Instantiate your graph
-graph.add_vertex('0')
-graph.add_vertex('1')
-graph.add_vertex('2')
-graph.add_vertex('3')
-graph.add_vertex('4')
-graph.add_vertex('5')
-graph.add_vertex('6')
-graph.add_vertex('7')
+def main():
+    graph = Graph()  # Instantiate your graph
+    graph.add_vertex('0')
+    graph.add_vertex('1')
+    graph.add_vertex('2')
+    graph.add_vertex('3')
+    graph.add_vertex('4')
+    graph.add_vertex('5')
+    graph.add_vertex('6')
+    graph.add_vertex('7')
 
-graph.add_edge('0', '1')
-graph.add_edge('0', '3')
-graph.add_edge('0', '4')
-graph.add_edge('1', '7')
-graph.add_edge('1', '4')
-graph.add_edge('5', '3')
-graph.add_edge('5', '6')
+    graph.add_edge('0', '1')
+    graph.add_edge('0', '3')
+    graph.add_edge('0', '4')
+    graph.add_edge('1', '7')
+    graph.add_edge('1', '4')
+    graph.add_edge('5', '3')
+    graph.add_edge('5', '6')
+
+    print(graph.vertices)
+    print("end of vertices")
+
+    #print(graph.bfs('0', '7'))
+    print(graph.bfs('0', '7'))
 
 
-print(graph.vertices)
-print("end of vertices")
+'''
+def main():
+    graph = Graph()  # Instantiate your graph
+    graph.add_vertex('1')
+    graph.add_vertex('2')
+    graph.add_vertex('3')
+    graph.add_vertex('4')
+    graph.add_vertex('5')
+    graph.add_vertex('6')
+    graph.add_vertex('7')
+    graph.add_directed_edge('5', '3')
+    graph.add_directed_edge('6', '3')
+    graph.add_directed_edge('7', '1')
+    graph.add_directed_edge('4', '7')
+    graph.add_directed_edge('1', '2')
+    graph.add_directed_edge('7', '6')
+    graph.add_directed_edge('2', '4')
+    graph.add_directed_edge('3', '5')
+    graph.add_directed_edge('2', '3')
+    graph.add_directed_edge('4', '6')
+    print(graph.vertices)
 
-#print(graph.bfs('0', '7'))
-print(graph.dfs('3', '1'))
+
+'''
+if __name__ == '__main__':
+    # TODO - parse argv
+    main()

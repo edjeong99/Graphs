@@ -4,6 +4,7 @@ class User:
     def __init__(self, name):
         self.name = name
 
+
 class SocialGraph:
     def __init__(self):
         self.lastID = 0
@@ -49,6 +50,7 @@ class SocialGraph:
         # Add users
 
         # Create friendships
+        # total of 20 friendship  2 * 10
 
     def getAllSocialPaths(self, userID):
         """
