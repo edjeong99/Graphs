@@ -79,11 +79,9 @@ class SocialGraph:
         while count < numUsers * avgFriendships // 2:
             #get 2 different random number
             num1 = random.randint(1,numUsers)
-            num2 = num1
-            while num1 == num2:
-                num2 = random.randint(1,numUsers)
+            num2 = random.randint(1,numUsers)
             # addFriendship return True if add was successful 
-            # addFriend check if if num1, num2 is already friend
+            # addFriend check if num1 == num2 and if num1, num2 is already friend
             if self.addFriendship(num1, num2):
                 count += 1
 
@@ -101,19 +99,14 @@ class SocialGraph:
         visited = {}  # Note that this is a dictionary, not a set
         # !!!! IMPLEMENT ME
 
-        # initialize queue and visited
+        # initialize queue 
         q = Queue()
-        # for friend in self.friendships[userID]:
-        #     q.enqueue(userID)  #for each userID, I enqueue friend
-        #     q.enqueue(friend)
 
-        
         q.enqueue([userID])
 
         while q.size() > 0:
-            # dequeue a userID and one of its friend
-            # current_userID = q.dequeue()
-            # current_user_friend = q.dequeue()
+            # dequeue a path and assign current user
+
             path = q.dequeue()
             current_user = path[-1]
            
