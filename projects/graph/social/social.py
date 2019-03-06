@@ -58,7 +58,7 @@ class SocialGraph:
 
         # Create friendships
 
-        # below codes make O(N^2)
+        # below codes has time complexity of O(n^2)
         # possibleFriendships = []
         # for userID in self.users:
         #     for friendID in range(userID + 1, self.lastID + 1):
@@ -72,14 +72,18 @@ class SocialGraph:
         #     self.addFriendship(
         #         possibleFriendships[i][0], possibleFriendships[i][1])
  
+        # below code replace above commented code of O(n^2)
         # populate with time complexity O(n)
         count = 0
 
         while count < numUsers * avgFriendships // 2:
+            #get 2 different random number
             num1 = random.randint(1,numUsers)
             num2 = num1
             while num1 == num2:
                 num2 = random.randint(1,numUsers)
+            # addFriendship return True if add was successful 
+            # addFriend check if if num1, num2 is already friend
             if self.addFriendship(num1, num2):
                 count += 1
 
@@ -125,8 +129,8 @@ class SocialGraph:
 
 if __name__ == '__main__':
     sg = SocialGraph()
-    sg.populateGraph(6, 2)
-    print(sg.friendships)
-    # connections = sg.getAllSocialPaths(1)
-    # print(connections)
-    # print(len(connections))
+    sg.populateGraph(1000, 5)
+    #print(sg.friendships)
+    connections = sg.getAllSocialPaths(1)
+    print(connections)
+    print(len(connections))
