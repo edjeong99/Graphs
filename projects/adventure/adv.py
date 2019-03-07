@@ -1,8 +1,41 @@
 from room import Room
 from player import Player
 from world import World
-
 import random
+
+class Queue():
+    def __init__(self):
+        self.queue = []
+
+    def enqueue(self, value):
+        self.queue.append(value)
+
+    def dequeue(self):
+        if self.size() > 0:
+            return self.queue.pop(0)
+        else:
+            return None
+
+    def size(self):
+        return (len(self.queue))
+
+def find_nearest_unexplored(starting_room_id, graph):
+    q = Queue()
+    visited = set()
+    q.enqueue([starting_room_id])
+    while q.size() > 0:
+        path = q.dequeue()
+        current_room = path[-1]
+        if current_room not in visited:
+            visited.add(current_room)
+
+            if '?' in graph[current_room].values():
+                return path
+            for neighbor in graph[current_room].values():
+   
+                new_path = list(path)
+                new_path.append(neighbor)
+                q.enqueue(new_path)
 
 # Load world
 world = World()
@@ -34,7 +67,7 @@ current_room = player.currentRoom.id
 pre_room = None
 
 # Loop until current room is not None
-while current_room is not None:
+while current_room is not None and len(traversalPath) < 10:
     print(f'current_room = {current_room}')
     print(graph)    
 
@@ -44,6 +77,7 @@ while current_room is not None:
         if graph[player.currentRoom.id][exit] == '?':
             direction = exit
             break
+    print(f'direction = {direction}')
     if direction is not None: #if unvisited connecting room exist
         pre_room = player.currentRoom.id
         traversalPath.append(direction)
@@ -62,7 +96,22 @@ while current_room is not None:
         current_room = player.currentRoom.id
     
     else: # if all connecting room is visited or None
-        current_room = None
+        # execute Breadth first search. if room with unvisited connecting room exist, return path to that room
+        # if there is no unvisited room, return None
+        path = find_nearest_unexplored(current_room, graph)
+
+        if path is None:
+            current_room = None
+        else:
+            current_room = path[-1]
+            #convert path into directions
+            directions = path
+            # add directions to traversalPath
+            traversalPath.extend(directions)
+
+
+
+
 
     # add direction to traversalPath
     # get room number from that direction
