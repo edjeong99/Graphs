@@ -12,41 +12,80 @@ world = World()
 # roomGraph={0: [(3, 5), {'n': 1}], 1: [(3, 6), {'s': 0, 'n': 2}], 2: [(3, 7), {'s': 1}]}
 roomGraph={0: [(3, 5), {'n': 1, 's': 5, 'e': 3, 'w': 7}], 1: [(3, 6), {'s': 0, 'n': 2}], 2: [(3, 7), {'s': 1}], 3: [(4, 5), {'w': 0, 'e': 4}], 4: [(5, 5), {'w': 3}], 5: [(3, 4), {'n': 0, 's': 6}], 6: [(3, 3), {'n': 5}], 7: [(2, 5), {'w': 8, 'e': 0}], 8: [(1, 5), {'e': 7}]}
 
-
+# initialize world and player
 world.loadGraph(roomGraph)
 player = Player("Name", world.startingRoom)
 
+#initialize traversalPath and graph
+# traversalPath record directions it takes to visit all room
+# graph records which room is visited and direction of connected visited room
+traversalPath = []
+graph = {}
+inverDirections = {'n':'s', 's':'n', 'w':'e', 'e':'w' }
 
-
-
-# FILL THIS IN
-traversalPath = ['n', 's']
-
-# graph = {
-#   0: {'n': 4, 's': 8, 'w': 3, 'e': '?'},
-#   4: {'s': 0},
-#   8: {'n': 0, 'w': 16},
-#   16: {'e': 8},
-#   3: {'n': '?', 'w': '?', 'e': 0}
-# }
-
-# start at starting room
-
+# initialize with starting room
 # add starting room and exits to graph
+if player.currentRoom.id not in graph:
+    graph[player.currentRoom.id] = {}
+    for exit in player.currentRoom.getExits():
+        graph[player.currentRoom.id][exit] = '?'
+# set current room = starting room
+current_room = player.currentRoom.id 
+pre_room = None
 
-# Loop until ***
+# Loop until current room is not None
+while current_room is not None:
+    print(f'current_room = {current_room}')
+    print(graph)    
+
     # get first empty direction of current room
+    direction = None;
+    for exit in player.currentRoom.getExits():
+        if graph[player.currentRoom.id][exit] == '?':
+            direction = exit
+            break
+    if direction is not None: #if unvisited connecting room exist
+        pre_room = player.currentRoom.id
+        traversalPath.append(direction)
+        player.travel(direction)  # visit the unvisited connecting room
+        graph[pre_room][direction] = player.currentRoom.id #assign new room to that direction
+        if player.currentRoom.id not in graph: # if new room is not in graph
+            graph[player.currentRoom.id] = {}
+            for exit in player.currentRoom.getExits():
+                graph[player.currentRoom.id][exit] = '?'
+        
+        #assign previous room in opposite direction
+        oppDirection = inverDirections[direction]
+        
+        graph[player.currentRoom.id][oppDirection] = pre_room
+
+        current_room = player.currentRoom.id
+    
+    else: # if all connecting room is visited or None
+        current_room = None
+
+    # add direction to traversalPath
     # get room number from that direction
-    # assing the new room number to that direction in graph
+    # assign the new room number to that direction in graph
+
     # if that new room num is not in graph, add new room + its exit
-    # fill new room's exit with old room number
-
+        # fill new room's exit with old room number
+    
     # if new room has more direction to go, current room = new room
-    # else if DFS to find nearest room with empty direction current room = DFS
-    # else break loop
+    # else if DFS to find nearest room with empty direction return path
+        # set path into direction and current room 
+        
+    # else current room = None
 
 
 
+#DFS
+# do DFS
+    # check each connecting room if it has ? direction, then return room id and direction to get that room
+
+
+world.printRooms()
+print(graph)
 
 
 # TRAVERSAL TEST
@@ -62,6 +101,7 @@ if len(visited_rooms) == len(roomGraph):
 else:
     print("TESTS FAILED: INCOMPLETE TRAVERSAL")
     print(f"{len(roomGraph) - len(visited_rooms)} unvisited rooms")
+
 
 
 
@@ -85,7 +125,6 @@ else:
 #   3: {'n': '?', 'w': '?', 'e': 0}
 # }
 
-world.printRooms()
 
 
 
