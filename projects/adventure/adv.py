@@ -67,7 +67,7 @@ current_room = player.currentRoom.id
 pre_room = None
 
 # Loop until current room is not None
-while current_room is not None :
+while len(graph) < len(roomGraph) :
     # print(f'current_room = {current_room}')
     # print(graph)    
 
@@ -76,7 +76,6 @@ while current_room is not None :
     for exit in player.currentRoom.getExits():
         if graph[player.currentRoom.id][exit] == '?':
             direction = exit
-            break
 
     if direction is not None: #if unvisited connecting room exist
         pre_room = player.currentRoom.id
@@ -93,18 +92,17 @@ while current_room is not None :
         
         graph[player.currentRoom.id][oppDirection] = pre_room
 
-        current_room = player.currentRoom.id
     
     else: # if all connecting room is visited or None
         # execute Breadth first search. if room with unvisited connecting room exist, return path to that room
         # if there is no unvisited room, return None
-        path = find_nearest_unexplored(current_room, graph)
+        path = find_nearest_unexplored(player.currentRoom.id, graph)
         #print(f'path = {path}')
         if path is None:
             current_room = None
         else:
-            current_room = path[-1]
-            #convert path into directions
+
+            #convert path into directions and move player
             for i in range(len(path)-1):
                 room = path[i]
                 #print(room)
@@ -112,32 +110,6 @@ while current_room is not None :
                     if graph[room][exit] == path[i + 1]:
                         traversalPath.append(exit)
                         player.travel(exit) 
-
-
-
-
-
-
-
-    # add direction to traversalPath
-    # get room number from that direction
-    # assign the new room number to that direction in graph
-
-    # if that new room num is not in graph, add new room + its exit
-        # fill new room's exit with old room number
-    
-    # if new room has more direction to go, current room = new room
-    # else if DFS to find nearest room with empty direction return path
-        # set path into direction and current room 
-        
-    # else current room = None
-
-
-
-#DFS
-# do DFS
-    # check each connecting room if it has ? direction, then return room id and direction to get that room
-
 
 world.printRooms()
 print(graph)
